@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniStation AI - Interactive Business Case</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #FDFBF7; /* Warm neutral background */
+            color: #3A3836; /* Soft charcoal text */
+        }
+        
+        /* Custom scrollbar for aesthetics */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FDFBF7; }
+        ::-webkit-scrollbar-thumb { background: #D4A373; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #B58453; }
+
+        /* Chart Containers - Adhering to strict requirements */
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px; 
+            max-height: 400px; 
+        }
+        .large-chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 800px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 450px; 
+            max-height: 500px; 
+        }
+
+        /* Aesthetics */
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAE6DF;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(58, 56, 54, 0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(58, 56, 54, 0.06);
+        }
+        .accent-bg { background-color: #688A7E; } /* Muted Sage Green */
+        .accent-text { color: #688A7E; }
+        .secondary-accent-bg { background-color: #D4A373; } /* Soft Warm Tan */
+        .secondary-accent-text { color: #D4A373; }
+        
+        .interactive-btn {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .interactive-btn.active {
+            background-color: #688A7E;
+            color: #FFFFFF;
+            border-color: #688A7E;
+        }
+    </style>
+</head>
+<body class="antialiased pb-24">
+
+<!-- Chosen Palette: Warm Harmony (Background: #FDFBF7, Text: #3A3836, Accents: #688A7E (Sage), #D4A373 (Tan), #F5F2EA (Beige)) -->
+<!-- Application Structure Plan: The SPA is structured as an interactive "Pitch Document" tailored for a data analyst. It moves logically from the 'Why' (Market & Pain Points) to the 'What' (Interactive Architecture/Features), then to the 'How' (Data Analytics Deep Dive for the nephew), and finally the 'Next Steps' (Apps Script Prototype). This linear, yet explorable flow ensures the user (the nephew) understands the business context before diving into the data science opportunities. -->
+<!-- Visualization & Content Choices: 
+    - Market Context -> Inform/Compare -> Donut Chart (Chart.js): Shows fragmentation of US market.
+    - Legacy vs AI -> Compare -> Stacked Bar (Chart.js): Quantifies time saved via automation.
+    - Feature Architecture -> Organize -> Interactive HTML/CSS Tabs: Allows deep diving into specific modules (POS, AI, Camera) without cluttering the page. NO SVG/Mermaid.
+    - Store Analytics -> Relationships -> ScatterGL (Plotly): Appeals to the data analyst; shows multidimensional correlation between labor, revenue, and security alerts. WebGL used.
+    - Competitor Analysis -> Compare -> Radar Chart (Chart.js): Visually contrasts OmniStation's modern AI features against legacy systems like MercuryOne.
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navigation / Header -->
+    <nav class="sticky top-0 z-50 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#EAE6DF] px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">⛽</span>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-[#3A3836]">OmniStation <span class="accent-text font-light">AI</span></h1>
+                    <p class="text-xs text-gray-500 font-medium uppercase tracking-wider">Business Proposal & Analytics Strategy</p>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <a href="#market" class="text-sm font-medium text-gray-600 hover:text-[#688A7E] px-3 py-2">Market</a>
+                <a href="#features" class="text-sm font-medium text-gray-600 hover:text-[#688A7E] px-3 py-2">Platform</a>
+                <a href="#analytics" class="text-sm font-medium text-gray-600 hover:text-[#688A7E] px-3 py-2">Analytics</a>
+                <a href="#prototype" class="bg-[#688A7E] text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-[#57756A] transition">Launch Plan</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 space-y-24">
+
+        <!-- Intro Section -->
+        <section class="text-center max-w-4xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">Modernizing C-Stores with <br><span class="accent-text">Conversational AI & Analytics</span></h2>
+            <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                Hey! Congratulations on finishing your Master's in Data & Analytics! Since you're in Atlanta and our family is deeply rooted in the gas station and convenience store business, I wanted to share a massive opportunity. 
+                Legacy systems like MercuryOne are clunky. Let's build an AI-native SaaS platform that automates inventory, payroll, and security—driven by a conversational interface and advanced predictive analytics.
+            </p>
+        </section>
+
+        <!-- Section 1: Market & Problem -->
+        <section id="market" class="scroll-mt-24">
+            <div class="mb-10 text-center md:text-left">
+                <h3 class="text-2xl font-bold flex items-center justify-center md:justify-start gap-2">
+                    <span class="text-[#D4A373] text-3xl">■</span> The Fragmentation Opportunity
+                </h3>
+                <p class="mt-3 text-gray-600 max-w-3xl">
+                    The US market is heavily composed of independent operators. They don't have corporate IT teams. They spend hours weekly on manual data entry, scheduling, and tax prep. We are replacing dashboards with direct AI automation.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card p-6 md:p-8 flex flex-col">
+                    <h4 class="text-lg font-semibold mb-2">USA Market Composition (2025)</h4>
+                    <p class="text-sm text-gray-500 mb-6 flex-grow">Independent stores are our prime target. They need enterprise-grade data tools without the enterprise complexity.</p>
+                    <div class="chart-container">
+                        <canvas id="marketDonutChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card p-6 md:p-8 flex flex-col">
+                    <h4 class="text-lg font-semibold mb-2">Managerial Time Drain</h4>
+                    <p class="text-sm text-gray-500 mb-6 flex-grow">Comparing weekly hours spent on operations using legacy back-office software vs. the proposed OmniStation AI.</p>
+                    <div class="chart-container">
+                        <canvas id="timeSavedChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive Feature Architecture -->
+        <section id="features" class="scroll-mt-24 bg-[#F5F2EA] rounded-3xl p-8 md:p-12 border border-[#EAE6DF]">
+            <div class="mb-10">
+                <h3 class="text-2xl font-bold flex items-center gap-2">
+                    <span class="text-[#688A7E] text-3xl">■</span> Platform Architecture
+                </h3>
+                <p class="mt-3 text-gray-600 max-w-3xl">
+                    OmniStation isn't just a database; it's a central nervous system. Select a module below to see how data flows from the physical store into our AI core, and how it translates into user-friendly outputs.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Interactive Controls -->
+                <div class="lg:col-span-1 flex flex-col gap-3" id="feature-controls">
+                    <button class="interactive-btn active bg-white border border-[#EAE6DF] text-left p-4 rounded-xl font-semibold flex items-center justify-between" data-target="ai-chat">
+                        <span class="flex items-center gap-3"><span class="text-2xl">💬</span> Conversational UI</span>
+                        <span class="text-[#688A7E] font-bold">→</span>
+                    </button>
+                    <button class="interactive-btn bg-white border border-[#EAE6DF] text-left p-4 rounded-xl font-semibold flex items-center justify-between" data-target="inventory">
+                        <span class="flex items-center gap-3"><span class="text-2xl">🧾</span> Smart Inventory & OCR</span>
+                        <span class="text-[#EAE6DF] font-bold">→</span>
+                    </button>
+                    <button class="interactive-btn bg-white border border-[#EAE6DF] text-left p-4 rounded-xl font-semibold flex items-center justify-between" data-target="camera">
+                        <span class="flex items-center gap-3"><span class="text-2xl">📹</span> AI Video Audits</span>
+                        <span class="text-[#EAE6DF] font-bold">→</span>
+                    </button>
+                    <button class="interactive-btn bg-white border border-[#EAE6DF] text-left p-4 rounded-xl font-semibold flex items-center justify-between" data-target="staff">
+                        <span class="flex items-center gap-3"><span class="text-2xl">📅</span> Autonomous Staffing</span>
+                        <span class="text-[#EAE6DF] font-bold">→</span>
+                    </button>
+                </div>
+
+                <!-- Dynamic Content Area -->
+                <div class="lg:col-span-2 card p-8 bg-white min-h-[300px] flex flex-col justify-center" id="feature-display">
+                    <!-- Initial Content (AI Chat) -->
+                    <div class="feature-content" id="content-ai-chat">
+                        <div class="inline-block px-3 py-1 bg-[#F5F2EA] text-[#688A7E] text-xs font-bold rounded-full uppercase tracking-wide mb-4">Core Differentiator</div>
+                        <h4 class="text-2xl font-bold mb-4">No Dashboards. Just Ask.</h4>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Owners shouldn't have to hunt for reports. The backend aggregates everything. They simply text or type in the app: <br><br>
+                            <em class="bg-[#FDFBF7] px-4 py-2 rounded-lg border border-[#EAE6DF] block text-sm">"What was my profit margin on energy drinks yesterday?"</em><br>
+                            <em class="bg-[#FDFBF7] px-4 py-2 rounded-lg border border-[#EAE6DF] block text-sm mt-2">"Generate Q3 tax information and email it to my accountant."</em>
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li>✓ Natural Language Processing (NLP) interprets intent.</li>
+                            <li>✓ Instantly queries PostgreSQL/BigQuery backend.</li>
+                            <li>✓ Generates dynamic charts or USA-compliant tax PDFs on the fly.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Data Analytics Deep Dive (For the Nephew) -->
+        <section id="analytics" class="scroll-mt-24">
+            <div class="mb-10">
+                <h3 class="text-2xl font-bold flex items-center gap-2">
+                    <span class="text-[#3A3836] text-3xl">■</span> Predictive Analytics & Store Optimization
+                </h3>
+                <p class="mt-3 text-gray-600 max-w-3xl">
+                    This is your domain. Because we capture POS data, camera data, and labor schedules simultaneously, we can build multidimensional models. The chart below demonstrates a simulated anomaly detection model correlating labor efficiency with security events.
+                </p>
+            </div>
+
+            <div class="card p-6 md:p-10">
+                <div class="flex flex-col md:flex-row justify-between md:items-end mb-6 gap-4">
+                    <div>
+                        <h4 class="text-xl font-bold">Store Performance Matrix</h4>
+                        <p class="text-sm text-gray-500 mt-1">Simulated 30-day data across 5 regional stores.</p>
+                    </div>
+                    <div class="bg-[#F5F2EA] p-3 rounded-lg text-sm">
+                        <span class="font-bold text-[#3A3836]">Insight:</span> High labor cost + Low Revenue + High Alerts indicates a need for immediate remote video review.
+                    </div>
+                </div>
+                
+                <div id="plotlyScatterContainer" class="large-chart-container">
+                    <!-- Plotly Canvas Will Render Here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Competitive Analysis -->
+        <section class="scroll-mt-24">
+            <div class="mb-10">
+                <h3 class="text-2xl font-bold flex items-center gap-2">
+                    <span class="text-[#D4A373] text-3xl">■</span> Beating the Status Quo
+                </h3>
+                <p class="mt-3 text-gray-600 max-w-3xl">
+                    Current solutions like MercuryOne (MostEdge) are robust but rely on traditional web portals and manual data reconciliation. Our advantage lies in autonomous actions and immediate AI intelligence.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="card p-6 md:p-8">
+                    <h4 class="text-lg font-semibold mb-6">Feature Competency Radar</h4>
+                    <div class="chart-container">
+                        <canvas id="competitorRadarChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="p-5 border border-[#EAE6DF] rounded-xl bg-white hover:border-[#688A7E] transition">
+                        <h5 class="font-bold text-lg mb-1">Tax & Accounting</h5>
+                        <p class="text-sm text-gray-600">Competitors provide raw data exports. OmniStation auto-categorizes expenses via OCR and generates accountant-ready summaries for US tax codes.</p>
+                    </div>
+                    <div class="p-5 border border-[#EAE6DF] rounded-xl bg-white hover:border-[#688A7E] transition">
+                        <h5 class="font-bold text-lg mb-1 flex justify-between items-center">
+                            Video Synchronization <span class="bg-[#F5F2EA] text-[#D4A373] text-[10px] uppercase px-2 py-1 rounded-sm font-bold">Key Differentiator</span>
+                        </h5>
+                        <p class="text-sm text-gray-600">If the POS logs a $0 transaction or a 'Void', the system automatically clips the exact 30-second camera footage and emails it to the owner.</p>
+                    </div>
+                    <div class="p-5 border border-[#EAE6DF] rounded-xl bg-white hover:border-[#688A7E] transition">
+                        <h5 class="font-bold text-lg mb-1">Autonomous Shift Fulfillment</h5>
+                        <p class="text-sm text-gray-600">If a 24-hour shift gets canceled, the system auto-SMS texts available staff. First to reply 'YES' updates the schedule and payroll instantly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: MVP Prototype Plan -->
+        <section id="prototype" class="scroll-mt-24 bg-[#3A3836] text-white rounded-3xl p-8 md:p-12 shadow-xl">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold mb-4">Phase 1: Prototyping at the Family Store</h3>
+                <p class="text-[#EAE6DF] max-w-2xl mx-auto">
+                    Before we build full mobile apps and complex backends, we will test the core concepts using Google Apps Script to solve real problems for our dad/brother's stores today.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                <!-- Connecting Line for larger screens -->
+                <div class="hidden md:block absolute top-1/2 left-10 right-10 h-0.5 bg-[#688A7E] opacity-30 -translate-y-1/2 z-0"></div>
+
+                <div class="bg-[#2A2927] p-6 rounded-2xl relative z-10 border border-[#4A4845]">
+                    <div class="w-12 h-12 bg-[#688A7E] text-white rounded-full flex items-center justify-center font-bold text-xl mb-4 mx-auto md:mx-0">1</div>
+                    <h4 class="font-bold text-lg mb-2 text-center md:text-left">Shift SMS Bot</h4>
+                    <p class="text-sm text-[#B0ADAA] text-center md:text-left">Use Apps Script tied to Google Sheets. If someone changes a cell to "Call Out", trigger a Twilio API script to text remaining staff.</p>
+                </div>
+
+                <div class="bg-[#2A2927] p-6 rounded-2xl relative z-10 border border-[#4A4845]">
+                    <div class="w-12 h-12 bg-[#D4A373] text-white rounded-full flex items-center justify-center font-bold text-xl mb-4 mx-auto md:mx-0">2</div>
+                    <h4 class="font-bold text-lg mb-2 text-center md:text-left">Invoice OCR</h4>
+                    <p class="text-sm text-[#B0ADAA] text-center md:text-left">Create a shared Google Drive. When an invoice photo is uploaded, Apps Script passes it to Google Document AI, extracting inventory items straight into a Sheet.</p>
+                </div>
+
+                <div class="bg-[#2A2927] p-6 rounded-2xl relative z-10 border border-[#4A4845]">
+                    <div class="w-12 h-12 bg-[#F5F2EA] text-[#3A3836] rounded-full flex items-center justify-center font-bold text-xl mb-4 mx-auto md:mx-0">3</div>
+                    <h4 class="font-bold text-lg mb-2 text-center md:text-left">Data Modeling</h4>
+                    <p class="text-sm text-[#B0ADAA] text-center md:text-left">You take over here. Pull the Sheets data into Python/R, build the predictive models for inventory thresholds, and we formulate the SaaS pitch.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-24 py-8 text-center border-t border-[#EAE6DF] text-sm text-gray-500">
+        <p>Project OmniStation AI &copy; 2026. Interactive Proposal prepared for Data & Analytics review.</p>
+    </footer>
+
+    <!-- JavaScript Logic & Chart Data -->
+    <script>
+        // --- Utility: Label Wrapping for Chart.js (Required) ---
+        function wrapLabel(label, limit = 16) {
+            if (typeof label !== 'string') return label;
+            if (label.length <= limit) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + words[i].length + 1 <= limit) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- Utility: Common Tooltip Config for Chart.js (Required) ---
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- Data & Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. Chart.js: Market Composition Donut Chart
+            const donutCtx = document.getElementById('marketDonutChart').getContext('2d');
+            new Chart(donutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Independent Single-Store Operators', 
+                        'Small Regional Chains (2-10 stores)', 
+                        'Large Corporate Chains'
+                    ].map(l => wrapLabel(l)),
+                    datasets: [{
+                        data: [61, 19, 20],
+                        backgroundColor: ['#688A7E', '#D4A373', '#EAE6DF'],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF',
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Plus Jakarta Sans', sans-serif" } } },
+                        tooltip: commonTooltipConfig
+                    }
+                }
+            });
+
+            // 2. Chart.js: Time Saved Stacked Bar Chart
+            const barCtx = document.getElementById('timeSavedChart').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Scheduling / Payroll', 
+                        'Inventory Processing', 
+                        'Tax / Reporting Prep', 
+                        'Reviewing Security Footage'
+                    ].map(l => wrapLabel(l)),
+                    datasets: [
+                        {
+                            label: 'Legacy Systems (Hrs/Wk)',
+                            data: [12, 18, 8, 5],
+                            backgroundColor: '#EAE6DF',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'OmniStation AI (Hrs/Wk)',
+                            data: [2, 3, 1, 1],
+                            backgroundColor: '#688A7E',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: false, grid: { display: false } },
+                        y: { stacked: false, beginAtZero: true, title: { display: true, text: 'Hours per Week' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: commonTooltipConfig
+                    }
+                }
+            });
+
+            // 3. Chart.js: Competitor Radar Chart
+            const radarCtx = document.getElementById('competitorRadarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Conversational Chat UI', 
+                        'Automated Shift Refill', 
+                        'POS-to-Video Sync', 
+                        'Auto-Categorized Tax Data', 
+                        'Inventory OCR Scans', 
+                        'Standard Reporting'
+                    ].map(l => wrapLabel(l)),
+                    datasets: [
+                        {
+                            label: 'OmniStation AI',
+                            data: [100, 95, 100, 90, 95, 100],
+                            backgroundColor: 'rgba(104, 138, 126, 0.2)', // Sage Green transparent
+                            borderColor: '#688A7E',
+                            pointBackgroundColor: '#688A7E',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'MercuryOne / Legacy',
+                            data: [10, 20, 40, 60, 30, 90],
+                            backgroundColor: 'rgba(212, 163, 115, 0.2)', // Tan transparent
+                            borderColor: '#D4A373',
+                            pointBackgroundColor: '#D4A373',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { display: false }, // Hide internal numbers for cleaner look
+                            grid: { color: '#EAE6DF' },
+                            angleLines: { color: '#EAE6DF' },
+                            pointLabels: { font: { size: 11, family: "'Plus Jakarta Sans', sans-serif" } }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: commonTooltipConfig
+                    }
+                }
+            });
+
+            // 4. Plotly.js: ScatterGL Analytics Chart (Canvas/WebGL required)
+            // Generating synthetic data simulating 200 daily store reports
+            const numPoints = 200;
+            const laborCosts = [];
+            const revenue = [];
+            const alerts = [];
+            const texts = [];
+            const sizes = [];
+            const colors = [];
+
+            for (let i = 0; i < numPoints; i++) {
+                // Synthetic distribution
+                const labor = Math.floor(Math.random() * (1200 - 400 + 1)) + 400; // Daily labor $400 - $1200
+                const revBase = labor * (Math.random() * 4 + 3); // Revenue correlates to labor roughly
+                const isAnomaly = Math.random() > 0.9; // 10% chance of being an anomaly (high labor, low rev, high alerts)
+                
+                let finalRev = isAnomaly ? revBase * 0.4 : revBase;
+                let numAlerts = isAnomaly ? Math.floor(Math.random() * 5) + 3 : Math.floor(Math.random() * 2);
+                
+                laborCosts.push(labor);
+                revenue.push(finalRev);
+                alerts.push(numAlerts);
+                
+                texts.push(`Daily Labor: $${labor}<br>Revenue: $${Math.floor(finalRev)}<br>Security Alerts: ${numAlerts}`);
+                sizes.push((numAlerts + 1) * 8); // Size based on alerts
+                
+                // Color based on anomaly/alerts (Sage for normal, Tan for warning, Dark Gray for critical)
+                colors.push(numAlerts >= 3 ? '#3A3836' : (numAlerts > 0 ? '#D4A373' : '#688A7E'));
+            }
+
+            const trace = {
+                x: laborCosts,
+                y: revenue,
+                mode: 'markers',
+                type: 'scattergl', // Enforcing WebGL rendering
+                text: texts,
+                hoverinfo: 'text',
+                marker: {
+                    size: sizes,
+                    color: colors,
+                    opacity: 0.7,
+                    line: { width: 1, color: '#FDFBF7' }
+                }
+            };
+
+            const layout = {
+                margin: { l: 60, r: 20, t: 20, b: 50 },
+                xaxis: { title: 'Daily Labor Cost ($)', gridcolor: '#EAE6DF', zerolinecolor: '#EAE6DF' },
+                yaxis: { title: 'Daily Store Revenue ($)', gridcolor: '#EAE6DF', zerolinecolor: '#EAE6DF' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                hovermode: 'closest',
+                font: { family: "'Plus Jakarta Sans', sans-serif", color: '#3A3836' }
+            };
+
+            Plotly.newPlot('plotlyScatterContainer', [trace], layout, {responsive: true, displayModeBar: false});
+
+
+            // 5. Interactive UI Logic (Feature Tabs)
+            const featureContentData = {
+                'ai-chat': {
+                    tag: 'Core Differentiator',
+                    title: 'No Dashboards. Just Ask.',
+                    desc: 'Owners shouldn\'t have to hunt for reports. The backend aggregates everything. They simply text or type in the app: <br><br><em class="bg-[#FDFBF7] px-4 py-2 rounded-lg border border-[#EAE6DF] block text-sm">"What was my profit margin on energy drinks yesterday?"</em><br><em class="bg-[#FDFBF7] px-4 py-2 rounded-lg border border-[#EAE6DF] block text-sm mt-2">"Generate Q3 tax information and email it to my accountant."</em>',
+                    list: ['✓ Natural Language Processing (NLP) interprets intent.', '✓ Instantly queries PostgreSQL/BigQuery backend.', '✓ Generates dynamic charts or USA-compliant tax PDFs on the fly.']
+                },
+                'inventory': {
+                    tag: 'Process Automation',
+                    title: 'Snap, Scan, Stocked.',
+                    desc: 'Stop entering vendor invoices by hand. Staff take a photo of the delivery receipt with a tablet or phone.',
+                    list: ['✓ Computer Vision (OCR) reads line items, quantities, and prices.', '✓ Automatically cross-references with POS inventory levels.', '✓ Alerts owner if vendor prices increased compared to last month.']
+                },
+                'camera': {
+                    tag: 'Risk Mitigation',
+                    title: 'AI Video Audits & Sync',
+                    desc: 'Watching hours of tape is dead. OmniStation connects to standard IP cameras and syncs timestamp data with the POS system.',
+                    list: ['✓ Machine Vision counts foot traffic vs actual sales (conversion rate).', '✓ If cashier voids a high-ticket item, a 30-sec clip is automatically saved.', '✓ Suspicious activity triggers SMS alerts to management.']
+                },
+                'staff': {
+                    tag: 'Human Resources',
+                    title: 'Autonomous Shift Fulfillment',
+                    desc: 'Gas stations run 24/7. Call-outs are a nightmare. The staff portal manages this autonomously.',
+                    list: ['✓ Staff view schedules and digital paystubs on a mobile web-portal.', '✓ If someone cancels a shift, system texts all eligible, off-duty staff.', '✓ First to reply "YES" gets the shift; schedule updates instantly.']
+                }
+            };
+
+            const featureBtns = document.querySelectorAll('.interactive-btn');
+            const featureDisplay = document.getElementById('feature-display');
+
+            featureBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update Button States
+                    featureBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-[#688A7E]', 'text-white', 'border-[#688A7E]');
+                        b.classList.add('bg-white', 'text-[#3A3836]', 'border-[#EAE6DF]');
+                        b.querySelector('span:last-child').classList.remove('text-white');
+                        b.querySelector('span:last-child').classList.add('text-[#EAE6DF]');
+                    });
+                    
+                    this.classList.add('active', 'bg-[#688A7E]', 'text-white', 'border-[#688A7E]');
+                    this.classList.remove('bg-white', 'text-[#3A3836]', 'border-[#EAE6DF]');
+                    this.querySelector('span:last-child').classList.remove('text-[#EAE6DF]');
+                    this.querySelector('span:last-child').classList.add('text-white');
+
+                    // Update Content
+                    const target = this.getAttribute('data-target');
+                    const data = featureContentData[target];
+                    
+                    // Simple fade effect
+                    featureDisplay.style.opacity = 0;
+                    
+                    setTimeout(() => {
+                        featureDisplay.innerHTML = `
+                            <div class="feature-content" id="content-${target}">
+                                <div class="inline-block px-3 py-1 bg-[#F5F2EA] text-[#D4A373] text-xs font-bold rounded-full uppercase tracking-wide mb-4 border border-[#EAE6DF]">${data.tag}</div>
+                                <h4 class="text-2xl font-bold mb-4">${data.title}</h4>
+                                <p class="text-gray-600 mb-6 leading-relaxed">${data.desc}</p>
+                                <ul class="space-y-2 text-sm text-gray-600">
+                                    ${data.list.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                        featureDisplay.style.transition = 'opacity 0.3s ease';
+                        featureDisplay.style.opacity = 1;
+                    }, 150);
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
