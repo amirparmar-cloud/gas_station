@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+    Chosen Palette: Vibrant & Energetic (Indigo #4F46E5, Amber #F59E0B, Emerald #10B981, Pink #EC4899)
+    Application Structure Plan: 
+    - Hero: The "Edge AI" Pivot.
+    - Market Analysis: Fragmentation and the need for privacy.
+    - Tech Stack Comparison: Interactive toggle comparing "Legacy Cloud" vs "OmniStation Edge" (OpenClaw/NemoClaw/Tiiny AI).
+    - Data Processing Flow: Visualizing local OCR and Video analysis.
+    - Analytics Deep Dive: Correlation between local processing efficiency and store profitability.
+    - Roadmap: Prototyping with Apps Script and Edge hardware.
+    Visualization & Content Choices:
+    - Market Share (Donut): Chart.js - Shows the massive independent market.
+    - Cost/Privacy Matrix (Grouped Bar): Chart.js - Compares Cloud vs Edge.
+    - Competitive Advantage (Radar): Chart.js - Highlights local AI and Privacy features.
+    - Store Performance (ScatterGL): Plotly.js - Multidimensional data for the nephew's analysis.
+    - Architecture Diagram: Styled HTML/CSS - Showing the Tiiny AI hub connection.
+    CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniStation AI | The Edge Evolution Business Case</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+        .large-chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 450px; max-height: 500px; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 24px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+        .accent-gradient { background: linear-gradient(135deg, #4F46E5 0%, #EC4899 100%); }
+        .edge-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+</head>
+<body class="antialiased pb-20">
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 accent-gradient rounded-xl shadow-lg">
+                    <div class="text-white text-2xl font-bold">OS</div>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">OmniStation <span class="text-indigo-600">Edge</span> AI</h1>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Privacy-First Retail Intelligence</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                    <span class="w-2 h-2 mr-1 bg-emerald-500 rounded-full edge-pulse"></span> Local AI Ready
+                </span>
+                <nav class="flex gap-1 bg-slate-100 p-1 rounded-lg text-sm">
+                    <a href="#vision" class="px-3 py-1.5 rounded-md hover:bg-white transition font-medium">Vision</a>
+                    <a href="#tech" class="px-3 py-1.5 rounded-md hover:bg-white transition font-medium">Tech</a>
+                    <a href="#analytics" class="px-3 py-1.5 rounded-md hover:bg-white transition font-medium">Data</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 space-y-24">
+
+        <!-- Hero Section -->
+        <section id="vision" class="relative">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-5xl font-extrabold text-slate-900 leading-[1.1] mb-6">
+                        The Future of Retail is <span class="text-transparent bg-clip-text accent-gradient">Local.</span>
+                    </h2>
+                    <p class="text-lg text-slate-600 leading-relaxed mb-8">
+                        Most convenience store owners fear cloud dependency. They want to own their data. By combining <strong>Edge Computing</strong> (hardware like Tiiny AI) with <strong>Open Source Frameworks</strong> (NemoClaw, OpenClaw), we build a platform where camera analysis and invoice scanning happen <em>inside</em> the store—not on a remote server.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-xl border border-indigo-100">
+                            <span class="text-xl">🛡️</span>
+                            <span class="font-bold text-sm">Data Sovereignty</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-pink-50 text-pink-700 px-4 py-2 rounded-xl border border-pink-100">
+                            <span class="text-xl">⚡</span>
+                            <span class="font-bold text-sm">Low Latency</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-amber-50 text-amber-700 px-4 py-2 rounded-xl border border-amber-100">
+                            <span class="text-xl">💰</span>
+                            <span class="font-bold text-sm">No Recurring Cloud Fees</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 accent-gradient opacity-10 rounded-full -mr-16 -mt-16"></div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <span class="p-1 bg-amber-100 rounded text-amber-600">⚡</span> Hardware Hub: Tiiny AI
+                    </h3>
+                    <p class="text-sm text-slate-500 mb-6">
+                        We leverage local "Pocket Lab" hardware to run quantized LLMs (like Llama 3 or Mistral) on-site. This hub manages the "Claws" (Agents) that do the dirty work.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between">
+                            <span class="font-bold text-slate-700">NemoClaw Integration</span>
+                            <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded font-bold uppercase">Vision Sync</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between">
+                            <span class="font-bold text-slate-700">OpenClaw Framework</span>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-bold uppercase">Task Automation</span>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-xl text-emerald-400 font-mono text-xs overflow-hidden">
+                            &gt; local_ai: running nemo_ocr_scan... <br>
+                            &gt; status: 15 items extracted from invoice.pdf <br>
+                            &gt; local_backup: complete.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market & Cost Analysis -->
+        <section id="tech" class="scroll-mt-24">
+            <div class="mb-12 text-center md:text-left">
+                <h3 class="text-3xl font-extrabold text-slate-900">Why Edge Wins Over Cloud</h3>
+                <p class="mt-4 text-slate-600 max-w-4xl">
+                    Retailers in Atlanta are often multi-generational family businesses. They trust "physical" security over "cloud" security. Our business model switches from an expensive monthly SaaS fee to a hardware-enabled ecosystem with lower long-term costs.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-card p-6 md:p-10">
+                    <h4 class="text-lg font-bold mb-2">5-Year TCO: Cloud vs. Edge Hub</h4>
+                    <p class="text-xs text-slate-400 mb-6">OmniStation Edge (Tiiny AI + Local LLM) vs. Standard Monthly SaaS Pricing.</p>
+                    <div class="chart-container">
+                        <canvas id="costComparisonChart"></canvas>
+                    </div>
+                </div>
+                <div class="glass-card p-6 md:p-10">
+                    <h4 class="text-lg font-bold mb-2">OmniStation Edge Advantage</h4>
+                    <p class="text-xs text-slate-400 mb-6">Mapping our framework capabilities against legacy competitors like MercuryOne.</p>
+                    <div class="chart-container">
+                        <canvas id="competitorRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Flow Diagram (No SVG/Mermaid) -->
+        <section class="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-white shadow-2xl relative overflow-hidden">
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-indigo-500 opacity-10 blur-[100px]"></div>
+            <div class="text-center mb-16">
+                <h3 class="text-3xl font-extrabold mb-4">The Local Intelligence Pipeline</h3>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    How data stays within the store while still providing elite AI insights.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 relative">
+                <!-- Data Source -->
+                <div class="w-full md:w-1/4 bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center">
+                    <div class="text-4xl mb-3">📸</div>
+                    <h4 class="font-bold">Store Data</h4>
+                    <p class="text-[10px] text-slate-400 mt-2">IP Cameras, POS Voids, Physical Invoices</p>
+                </div>
+
+                <div class="text-3xl text-indigo-500 font-bold hidden md:block">➔</div>
+                <div class="text-3xl text-indigo-500 font-bold md:hidden">↓</div>
+
+                <!-- Processing Core -->
+                <div class="w-full md:w-2/5 bg-indigo-600 p-8 rounded-3xl shadow-2xl relative">
+                    <div class="absolute -top-4 -right-4 bg-amber-400 text-slate-900 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">On-Prem Edge Hub</div>
+                    <div class="text-4xl mb-3">📟</div>
+                    <h4 class="text-xl font-extrabold">Tiiny AI Pocket Lab</h4>
+                    <div class="mt-4 space-y-2">
+                        <div class="bg-indigo-700/50 p-3 rounded-lg text-xs font-mono">
+                            <span class="text-emerald-400">OpenClaw:</span> Executing invoice_ocr...
+                        </div>
+                        <div class="bg-indigo-700/50 p-3 rounded-lg text-xs font-mono">
+                            <span class="text-amber-400">NemoClaw:</span> Analyzing security_clip_021...
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-indigo-200 mt-4 italic">*Local backup saved to encrypted NAS</p>
+                </div>
+
+                <div class="text-3xl text-indigo-500 font-bold hidden md:block">➔</div>
+                <div class="text-3xl text-indigo-500 font-bold md:hidden">↓</div>
+
+                <!-- End User -->
+                <div class="w-full md:w-1/4 bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center">
+                    <div class="text-4xl mb-3">📱</div>
+                    <h4 class="font-bold">Owner Insight</h4>
+                    <p class="text-[10px] text-slate-400 mt-2">Encrypted Chat Access & Automated Staff Scheduling</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Deep Dive (Nephew Focus) -->
+        <section id="analytics" class="scroll-mt-24">
+            <div class="mb-12">
+                <h3 class="text-3xl font-extrabold text-slate-900">Advanced Analytics for the Expert</h3>
+                <p class="mt-4 text-slate-600 max-w-4xl">
+                    As a data analyst, your role involves <strong>Model Quantization</strong> and <strong>Anomaly Logic</strong>. We need to correlate labor costs with local AI-flagged incidents. The visualization below shows how we can optimize store profitability by analyzing "Claw" alerts against POS revenue.
+                </p>
+            </div>
+
+            <div class="glass-card p-6 md:p-10">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                    <h4 class="text-xl font-bold">Operational Efficiency Correlation</h4>
+                    <div class="flex gap-2">
+                        <span class="bg-indigo-100 text-indigo-700 text-[10px] px-2 py-1 rounded font-bold">Labor vs Revenue</span>
+                        <span class="bg-pink-100 text-pink-700 text-[10px] px-2 py-1 rounded font-bold">Edge Alert Frequency</span>
+                    </div>
+                </div>
+                <div id="plotlyEdgeScatter" class="large-chart-container"></div>
+            </div>
+        </section>
+
+        <!-- MVP Action Plan -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-indigo-50 rounded-3xl p-8 md:p-12 border border-indigo-100">
+            <div>
+                <h3 class="text-3xl font-extrabold text-indigo-900 mb-6">Nephew's Roadmap: Launch Plan</h3>
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                        <div>
+                            <h4 class="font-bold text-indigo-900">Prototype with Apps Script</h4>
+                            <p class="text-sm text-indigo-700/70">Connect a Google Sheet to a Tiiny AI hub via a local tunneling service. Use Apps Script to trigger local OCR on invoice uploads.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                        <div>
+                            <h4 class="font-bold text-indigo-900">Quantize the "Claws"</h4>
+                            <p class="text-sm text-indigo-700/70">Test NemoClaw's ability to run on low-power edge devices. Optimize the model to run on the 16-32GB VRAM local hardware.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                        <div>
+                            <h4 class="font-bold text-indigo-900">Community Pilot</h4>
+                            <p class="text-sm text-indigo-700/70">Deploy to one family-owned station in Atlanta. Market the "Privacy-First" approach to other independent owners in the community.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden md:block">
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-indigo-100">
+                    <h4 class="font-bold text-slate-800 mb-4">Draft Pitch to Store Owner</h4>
+                    <div class="italic text-slate-600 space-y-4 text-sm">
+                        <p>"Your data is your business. Why send it to the cloud?"</p>
+                        <p>"With OmniStation, your camera footage and payroll never leave this building. The AI lives in a small box under your desk."</p>
+                        <p>"It will alert you when you're low on milk, text your staff when a shift opens up, and prepare your taxes automatically. All while keeping you in total control."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-20 border-t border-slate-200 bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-400 text-xs font-medium uppercase tracking-widest">Project OmniStation AI | Research Report 2026</p>
+            <p class="text-slate-500 text-sm mt-2 font-bold italic">Synthesized for the Next Generation of Retail Analytics</p>
+        </div>
+    </footer>
+
+    <script>
+        function wrapLabel(label, limit = 16) {
+            if (typeof label !== 'string') return label;
+            if (label.length <= limit) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + words[i].length + 1 <= limit) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Cost Comparison (Grouped Bar)
+            const costCtx = document.getElementById('costComparisonChart').getContext('2d');
+            new Chart(costCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                    datasets: [
+                        {
+                            label: 'Legacy Cloud SaaS ($)',
+                            data: [3600, 3600, 3600, 3600, 3600],
+                            backgroundColor: '#94A3B8'
+                        },
+                        {
+                            label: 'OmniStation Edge ($)',
+                            data: [1800, 300, 300, 300, 300], // High initial hardware, low maintenance
+                            backgroundColor: '#4F46E5'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: commonTooltipConfig
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#E2E8F0' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2. Competitor Radar Chart
+            const radarCtx = document.getElementById('competitorRadarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Local AI Processing',
+                        'Data Privacy Control',
+                        'Zero Cloud Latency',
+                        'Open Framework Integration',
+                        'Inventory Automation',
+                        'Legacy Support'
+                    ].map(l => wrapLabel(l)),
+                    datasets: [
+                        {
+                            label: 'OmniStation AI (OpenClaw)',
+                            data: [100, 100, 95, 90, 85, 70],
+                            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                            borderColor: '#4F46E5',
+                            pointBackgroundColor: '#4F46E5'
+                        },
+                        {
+                            label: 'MercuryOne / Legacy',
+                            data: [10, 30, 40, 5, 80, 100],
+                            backgroundColor: 'rgba(236, 72, 153, 0.2)',
+                            borderColor: '#EC4899',
+                            pointBackgroundColor: '#EC4899'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: { 
+                            beginAtZero: true, 
+                            max: 100,
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: commonTooltipConfig
+                    }
+                }
+            });
+
+            // 3. Plotly ScatterGL for Analytics
+            const labor = Array.from({length: 150}, () => Math.floor(Math.random() * 60) + 20);
+            const revenue = labor.map(l => (l * (Math.random() * 4 + 2)) + Math.random() * 150);
+            const alerts = labor.map(() => Math.floor(Math.random() * 6));
+            
+            const trace = {
+                x: labor,
+                y: revenue,
+                mode: 'markers',
+                type: 'scattergl',
+                marker: {
+                    size: alerts.map(a => (a + 1) * 7),
+                    color: alerts.map(a => a > 3 ? '#EC4899' : (a > 1 ? '#F59E0B' : '#4F46E5')),
+                    opacity: 0.7,
+                    line: { width: 1, color: '#FFFFFF' }
+                },
+                text: alerts.map(a => `Edge Alerts (Anomaly): ${a}`),
+                hoverinfo: 'x+y+text'
+            };
+
+            const layout = {
+                margin: { l: 50, r: 20, t: 20, b: 50 },
+                xaxis: { title: 'Hourly Labor Expense ($)', gridcolor: '#F1F5F9' },
+                yaxis: { title: 'Hourly Store Sales ($)', gridcolor: '#F1F5F9' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: { family: 'Plus Jakarta Sans', color: '#64748B' }
+            };
+
+            Plotly.newPlot('plotlyEdgeScatter', [trace], layout, {responsive: true, displayModeBar: false});
+        });
+    </script>
+</body>
+</html>
